@@ -6,6 +6,7 @@ setup(
     py_modules=['how', 'why', 'where'],
     install_requires=[
         'openai',
+        'click'
     ],
     entry_points={
         'console_scripts': [
