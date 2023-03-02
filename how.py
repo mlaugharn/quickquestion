@@ -14,7 +14,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 @click.argument('question', required=True)
 def generate_answer(tldr, question):
     if tldr:
-        prompt = f"{ANSI_BOLD}TLDR: How do I {question}?{ANSI_RESET}\n"
+        prompt = f"prompt_context=["computer-related"]|| {ANSI_BOLD}TLDR: How do I {question}?{ANSI_RESET}\n"
         max_tokens = 20
     else:
         prompt = f"{ANSI_BOLD}How do I {question}?{ANSI_RESET}\n"
@@ -29,7 +29,6 @@ def generate_answer(tldr, question):
         temperature=0.7,
         frequency_penalty=0,
         presence_penalty=0,
-        prompt_context=["computer-related"]
     )
     answer = completion.choices[0].text.strip()
     return answer
