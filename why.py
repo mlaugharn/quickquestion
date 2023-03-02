@@ -1,6 +1,5 @@
 import openai
 import os
-import click
 
 # Define ANSI escape codes for console styling
 ANSI_BOLD = "\033[1m"
@@ -9,33 +8,26 @@ ANSI_RESET = "\033[0m"
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-@click.command()
-@click.option('--tldr', '-t', is_flag=True, help='Provide a short summary')
-@click.argument('question', type=str)
-def generate_answer(tldr, question):
-    if tldr:
-        max_tokens = 50
-    else:
-        max_tokens = 100
-
-    prompt = f"{ANSI_BOLD}Why is {question}?{ANSI_RESET}\n"
-    if tldr:
-        prompt += f"{ANSI_BOLD}TLDR:{ANSI_RESET} "
-    prompt += "\n"
-
+def generate_answer(question):
     completion = openai.Completion.create(
         engine="text-davinci-002",
-        prompt=prompt,
-        max_tokens=max_tokens,
+        prompt=f"{ANSI_BOLD}Why is {question} important? (Type {ANSI_GREEN}'tldr'{ANSI_RESET} for a short summary){ANSI_RESET}\n",
+        max_tokens=100,
         n=1,
         stop=None,
         temperature=0.7,
         frequency_penalty=0,
         presence_penalty=0,
-        prompt_context=["computer-related"]
+        model="text-davinci-002",
+        prompt_context={"prompt": "computer-related"}
     )
     answer = completion.choices[0].text.strip()
     return answer
 
 if __name__ == '__main__':
-    generate_answer()
+    question = input(f"{ANSI_BOLD}What computer-related question do you have? {ANSI_RESET}")
+    if question.lower() == 'tldr':
+        print(f"{ANSI_BOLD}To get a short summary, type {ANSI_GREEN}'tldr'{ANSI_RESET} after the question prompt.{ANSI_RESET}")
+    else:
+        answer = generate_answer(question)
+        print(f"\n{ANSI_BOLD}Answer: {ANSI_RESET}{ANSI_GREEN}{answer}{ANSI_RESET}")
