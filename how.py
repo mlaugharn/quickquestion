@@ -9,21 +9,23 @@ ANSI_RESET = "\033[0m"
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def generate_answer(question):
-    completion = openai.ChatCompletion.create(
-        model="chatgpt",
+    completion = openai.Completion.create(
+        engine="davinci-codex",
         prompt=f"{ANSI_BOLD}How do I {question}? (Type {ANSI_GREEN}'tldr'{ANSI_RESET} for a short summary){ANSI_RESET}\n",
-        temperature=0.7,
         max_tokens=100,
         n=1,
         stop=None,
+        temperature=0.7,
         frequency_penalty=0,
         presence_penalty=0,
+        model="text-davinci-002",
+        prompt_context=["computer-related"]
     )
     answer = completion.choices[0].text.strip()
     return answer
 
 if __name__ == '__main__':
-    question = input(f"{ANSI_BOLD}What do you want to know? {ANSI_RESET}")
+    question = input(f"{ANSI_BOLD}What computer-related question do you have? {ANSI_RESET}")
     if question.lower() == 'tldr':
         print(f"{ANSI_BOLD}To get a short summary, type {ANSI_GREEN}'tldr'{ANSI_RESET} after the question prompt.{ANSI_RESET}")
     else:
