@@ -10,18 +10,25 @@ ANSI_RESET = "\033[0m"
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @click.command()
-@click.option('--question', '-q', prompt=f"{ANSI_BOLD}What computer-related question do you have?{ANSI_RESET}")
-def generate_answer(question):
+@click.option('--tldr', '-t', is_flag=True, help=f"Get a short summary of the answer.")
+@click.argument('question', required=True)
+def generate_answer(tldr, question):
+    if tldr:
+        prompt = f"{ANSI_BOLD}TLDR: How do I {question}?{ANSI_RESET}\n"
+        max_tokens = 20
+    else:
+        prompt = f"{ANSI_BOLD}How do I {question}?{ANSI_RESET}\n"
+        max_tokens = 100
+
     completion = openai.Completion.create(
         engine="text-davinci-002",
-        prompt=f"{ANSI_BOLD}How do I {question}? (Type {ANSI_GREEN}'tldr'{ANSI_RESET} for a short summary){ANSI_RESET}\n",
-        max_tokens=100,
+        prompt=prompt,
+        max_tokens=max_tokens,
         n=1,
         stop=None,
         temperature=0.7,
         frequency_penalty=0,
         presence_penalty=0,
-        model="text-davinci-002",
         prompt_context=["computer-related"]
     )
     answer = completion.choices[0].text.strip()
@@ -29,7 +36,4 @@ def generate_answer(question):
 
 if __name__ == '__main__':
     answer = generate_answer()
-    if answer.lower() == 'tldr':
-        print(f"{ANSI_BOLD}To get a short summary, type {ANSI_GREEN}'tldr'{ANSI_RESET} after the question prompt.{ANSI_RESET}")
-    else:
-        print(f"\n{ANSI_BOLD}Answer: {ANSI_RESET}{ANSI_GREEN}{answer}{ANSI_RESET}")
+    print(f"\n{ANSI_BOLD}Answer: {ANSI_RESET}{ANSI_GREEN}{answer}{ANSI_RESET}")
