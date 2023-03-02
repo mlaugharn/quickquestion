@@ -15,13 +15,17 @@ def explain_error(error_message):
         max_tokens=100,
         n=1,
         stop=None,
-        temperature=0.5,
+        temperature=0.7,
+        frequency_penalty=0,
+        presence_penalty=0,
+        model="text-davinci-002",
+        prompt_context=["computer-related"]
     )
     explanation = completion.choices[0].text.strip()
     return explanation
 
 if __name__ == '__main__':
-    error_message = input(f"{ANSI_BOLD}What error did you get? {ANSI_RESET}")
+    error_message = input(f"{ANSI_BOLD}What computer-related error did you get? {ANSI_RESET}")
     if error_message.lower() == 'tldr':
         print(f"{ANSI_BOLD}To get a short summary, type {ANSI_CYAN}'tldr'{ANSI_RESET} after the error message prompt.{ANSI_RESET}")
     else:
