@@ -17,3 +17,5 @@ optionally you can provide context and a glob of the files to exclude:
 │ a │ '\n\nUnfortunately, this is a trick question and there is no definitive answer. It depends on the specific library and how it is used.' │ 'quickquestion.egg-info/SOURCES.txt' │                                      │
 └───┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴──────────────────────────────────────┴──────────────────────────────────────┘
 ```
+
+make sure to set `OPENAI_API_KEY`
