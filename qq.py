@@ -9,6 +9,7 @@ import rich
 from binaryornot.check import is_binary
 from langchain.docstore.document import Document
 from langchain.document_loaders.directory import _is_visible, logger
+import sys
 
 # Define ANSI escape codes for console styling
 ANSI_BOLD = "\033[1m"
@@ -74,13 +75,13 @@ class SpecificFilesLoader(DirectoryLoader):
                             raise e
         return docs
 
-cli = click.Group()
-
 @click.command()
-@click.argument('question', nargs=1)
+@click.argument('question', default="")
 @click.option('--context', is_flag=False, flag_value="", default="")
 @click.option('--exclude_glob',is_flag=False, flag_value="", default="")
 def answer(question, context, exclude_glob):
+    if question == "":
+        question = input("question: ")
     llm = OpenAI(temperature=temp)
     possible_files = glob.glob('**/*.*', recursive=True)
     non_binaryfiles = filter(lambda x: not is_binary(x), possible_files)
@@ -141,4 +142,7 @@ def print_qa(q, a):
 
 
 if __name__ == '__main__':
-    answer()
+    if sys.argc < 2:
+        answer()
+    else:
+        answer(sys.argv[1])
