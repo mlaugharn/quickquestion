@@ -8,7 +8,8 @@ setup(
         'openai',
         'click',
         'langchain',
-        'rich'
+        'rich',
+        'binaryornot'
     ],
     entry_points={
         'console_scripts': [
