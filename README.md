@@ -1,7 +1,7 @@
 # quickquestion
 ask chatgpt quick questions from the terminal
 
-`qq <question>` or just `qq`
+`qq "my question?"` or just `qq`
 
 it will scan the files in the current directory
 
